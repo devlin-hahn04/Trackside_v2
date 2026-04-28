@@ -4,6 +4,7 @@ import DriversPodium from "../components/f1/DriversPodium";
 import ConstructorsPodium from "../components/f1/ConstructorsPodium";
 import NextRace from "../components/f1/NextRace";
 import { useScraperData } from "../lib/scraperData";
+import LogoDropdown from "../components/ui/LogoDropdown";
 
 export default function Home() {
   const { loading, error, drivers, constructors, nextRace } = useScraperData();
@@ -56,10 +57,16 @@ export default function Home() {
           )`,
         }}
       />
+      
       {/* Top red bar */}
       <div className="h-[4px] bg-gradient-to-r from-[#E8002D] via-[#ff4444] to-[#E8002D]" />
 
       <div className="relative max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-8">
+        {/* Logo aligned with content - top right */}
+        <div className="flex justify-end">
+          <LogoDropdown />
+        </div>
+        
         <F1Header />
         
         {/* Show top 3 on podium */}
@@ -70,6 +77,7 @@ export default function Home() {
         {/* Footer */}
         <div className="text-center pb-6">
           <span className="font-heading text-sm text-muted-foreground tracking-widest">
+            <span className="text-[#E8002D] font-black italic">F1</span> 2025
           </span>
         </div>
       </div>
