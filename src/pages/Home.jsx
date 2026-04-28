@@ -77,7 +77,6 @@ export default function Home() {
         {/* Footer */}
         <div className="text-center pb-6">
           <span className="font-heading text-sm text-muted-foreground tracking-widest">
-            <span className="text-[#E8002D] font-black italic">F1</span> 2025
           </span>
         </div>
       </div>
