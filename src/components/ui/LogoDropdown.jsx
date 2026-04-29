@@ -89,7 +89,7 @@ export default function LogoDropdown() {
         className="focus:outline-none transition-transform hover:scale-105 active:scale-95"
       >
         <img 
-          src="/src/assets/TracksideLogo.png" 
+          src="/TracksideLogo.png" 
           alt="Trackside Logo" 
           className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 object-contain cursor-pointer"
         />
