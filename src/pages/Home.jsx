@@ -2,12 +2,12 @@ import { motion } from "framer-motion";
 import F1Header from "../components/f1/F1header";
 import DriversPodium from "../components/f1/DriversPodium";
 import ConstructorsPodium from "../components/f1/ConstructorsPodium";
-import NextRace from "../components/f1/NextRace";
+import RaceGlobe from "../components/f1/RaceGlobe";
 import { useScraperData } from "../lib/scraperData";
 import LogoDropdown from "../components/ui/LogoDropdown";
 
 export default function Home() {
-  const { loading, error, drivers, constructors, nextRace } = useScraperData();
+  const { loading, error, drivers, constructors } = useScraperData();
 
   // Show loading state
   if (loading) {
@@ -72,7 +72,7 @@ export default function Home() {
         {/* Show top 3 on podium */}
         <DriversPodium driversData={drivers} />
         <ConstructorsPodium constructorsData={constructors} />
-        <NextRace raceData={nextRace} />
+        <RaceGlobe />
 
         {/* Footer */}
         <div className="text-center pb-6">
