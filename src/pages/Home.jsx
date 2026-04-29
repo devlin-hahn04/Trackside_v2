@@ -7,7 +7,7 @@ import { useScraperData } from "../lib/scraperData";
 import LogoDropdown from "../components/ui/LogoDropdown";
 
 export default function Home() {
-  const { loading, error, drivers, constructors } = useScraperData();
+  const { loading, error, drivers, constructors, nextRace } = useScraperData();
 
   // Show loading state
   if (loading) {
@@ -38,6 +38,9 @@ export default function Home() {
       </div>
     );
   }
+
+  // Debug: Check what data is being passed
+  console.log('nextRace being passed to RaceGlobe:', nextRace);
 
   return (
     <div
@@ -72,7 +75,9 @@ export default function Home() {
         {/* Show top 3 on podium */}
         <DriversPodium driversData={drivers} />
         <ConstructorsPodium constructorsData={constructors} />
-        <RaceGlobe />
+        
+        {/* Pass nextRace data to the globe */}
+        <RaceGlobe raceData={nextRace} />
 
         {/* Footer */}
         <div className="text-center pb-6">
