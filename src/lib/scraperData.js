@@ -142,8 +142,23 @@ export const getConstructorStandingsArray = () => {
   }));
 };
 
-// Get next race info
+// Get next race info - now uses the full object from Supabase
 export const getNextRaceInfo = () => {
+  // If nextRace is already an object with all the details, just return it
+  if (nextRace && typeof nextRace === 'object' && nextRace.name) {
+    console.log('Using full nextRace object from Supabase:', nextRace);
+    return {
+      name: nextRace.name,
+      circuit: nextRace.circuit,
+      location: nextRace.location,
+      date: nextRace.date,
+      time: nextRace.time,
+      lat: nextRace.lat,
+      lng: nextRace.lng,
+    };
+  }
+  
+  // Fallback: if nextRace is still a string (old format)
   const raceCoordinates = {
     'Miami Grand Prix': { lat: 25.9581, lng: -80.2389, circuit: 'Miami International Autodrome', location: 'Miami, Florida', date: 'May 4, 2025', time: '15:00 CET' },
     'Spanish Grand Prix': { lat: 41.57, lng: 2.26, circuit: 'Circuit de Barcelona-Catalunya', location: 'Barcelona, Spain', date: 'June 1, 2025', time: '15:00 CET' },
