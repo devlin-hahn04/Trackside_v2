@@ -10,17 +10,19 @@ export const driverPhotos = new Map();
 export const retrieveScraperData = async () => {
   try {
     const url = import.meta.env.VITE_SUPABASE_SCRAPER_URL;
-    const anonKey = import.meta.env.VITE_SUPABASE_SCRAPER_ANON_KEY;
+    // Use service key first (for Netlify), fall back to anon key (for local)
+    const apiKey = import.meta.env.VITE_SUPABASE_SCRAPER_SERVICE_KEY || import.meta.env.VITE_SUPABASE_SCRAPER_ANON_KEY;
     
     console.log('Fetching from:', `${url}/rest/v1/f1_data?select=data&order=inserted_at.desc&limit=1`);
+    console.log('Using key type:', import.meta.env.VITE_SUPABASE_SCRAPER_SERVICE_KEY ? 'SERVICE_ROLE' : 'ANON');
     
     const response = await fetch(
       `${url}/rest/v1/f1_data?select=data&order=inserted_at.desc&limit=1`,
       {
         method: 'GET',
         headers: {
-          'apikey': anonKey,
-          'Authorization': `Bearer ${anonKey}`,
+          'apikey': apiKey,
+          'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         }
