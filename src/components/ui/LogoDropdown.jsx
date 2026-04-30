@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flag, Trophy, Calendar, User } from 'lucide-react';
+import { Flag, Trophy, Calendar, User, Home } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LogoDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -18,6 +20,7 @@ export default function LogoDropdown() {
   }, []);
 
   const menuItems = [
+    { id: 'home', label: 'Home', icon: Home, color: '#E8002D' },
     { id: 'constructors', label: 'Constructors Standings', icon: Flag, color: '#E8002D' },
     { id: 'drivers', label: 'Drivers Standings', icon: Trophy, color: '#E8002D' },
     { id: 'calendar', label: 'Calendar', icon: Calendar, color: '#E8002D' },
@@ -26,23 +29,21 @@ export default function LogoDropdown() {
 
   const handleItemClick = (itemId) => {
     console.log(`Clicked: ${itemId}`);
-    // Add navigation logic here
     switch(itemId) {
+      case 'home':
+        navigate('/');
+        break;
       case 'constructors':
-        // Navigate to Constructors Standings page
-        // window.location.href = '/constructors';
+        navigate('/constructors');
         break;
       case 'drivers':
-        // Navigate to Drivers Standings page
-        // window.location.href = '/drivers';
+        navigate('/drivers');
         break;
       case 'calendar':
-        // Navigate to Calendar page
-        // window.location.href = '/calendar';
+        navigate('/calendar');
         break;
       case 'profile':
-        // Navigate to Profile page
-        // window.location.href = '/profile';
+        navigate('/profile');
         break;
       default:
         break;

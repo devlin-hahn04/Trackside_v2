@@ -99,9 +99,9 @@ const getTeamColor = (teamName) => {
     'Haas F1 Team': '#B6BABD',
     'Alpine': '#FF87BC',
     'Racing Bulls': '#5E8FAA',
-    'Audi': '#0B5E2E',
+    'Audi': '#FF2D00',
     'Williams': '#64C4FF',
-    'Cadillac': '#FFB800',
+    'Cadillac': '#AAAADD',
     'Aston Martin': '#2D826F'
   };
   return teamColors[teamName] || '#FFFFFF';
