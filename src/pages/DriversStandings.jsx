@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { useScraperData } from "../lib/scraperData";
 import LogoDropdown from "../components/ui/LogoDropdown";
 import F1Header from "../components/f1/F1header";
 
 export default function DriversStandings() {
-  const { loading, error, drivers } = useScraperData();
+  const { loading, error, drivers, driverPhotosMap } = useScraperData();
 
   if (loading) {
     return (
@@ -28,89 +30,120 @@ export default function DriversStandings() {
     );
   }
 
+  // Helper to get driver photo or fallback
+  const getDriverPhoto = (driverName) => {
+    const photo = driverPhotosMap?.get(driverName);
+    if (photo) return photo;
+    // Fallback: try to find by last name only
+    const lastName = driverName.split(' ').pop();
+    return driverPhotosMap?.get(lastName) || null;
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ background: "#111318" }}>
+      {/* Speed lines background */}
       <div
         className="absolute inset-0 pointer-events-none opacity-10"
         style={{
-          backgroundImage: `repeating-linear-gradient(
-            -8deg,
-            transparent,
-            transparent 60px,
-            rgba(255,255,255,0.03) 60px,
-            rgba(255,255,255,0.03) 62px
-          )`,
+          backgroundImage: `repeating-linear-gradient(-8deg, transparent, transparent 60px, rgba(255,255,255,0.03) 60px, rgba(255,255,255,0.03) 62px)`,
         }}
       />
-      
+      {/* Top red bar */}
       <div className="h-[4px] bg-gradient-to-r from-[#E8002D] via-[#ff4444] to-[#E8002D]" />
 
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 py-6">
-        <div className="flex justify-end mb-4">
+      <div className="relative max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+        {/* Logo and Header */}
+        <div className="flex justify-between items-start">
+          <div className="flex-1" />
           <LogoDropdown />
         </div>
         
         <F1Header />
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mt-8"
-        >
-          <h2 className="font-heading text-3xl sm:text-4xl font-black text-white tracking-wider mb-6">
-            DRIVER STANDINGS
-          </h2>
-          
-          <div className="bg-[#1a1d24] rounded-lg overflow-hidden border border-[#E8002D]/20">
-            <table className="w-full">
-              <thead className="bg-[#E8002D]/10 border-b border-[#E8002D]/30">
-                <tr>
-                  <th className="px-6 py-4 text-left text-white font-heading text-sm">POS</th>
-                  <th className="px-6 py-4 text-left text-white font-heading text-sm">DRIVER</th>
-                  <th className="px-6 py-4 text-left text-white font-heading text-sm">TEAM</th>
-                  <th className="px-6 py-4 text-right text-white font-heading text-sm">POINTS</th>
-                </tr>
-              </thead>
-              <tbody>
-                {drivers.map((driver, index) => (
-                  <motion.tr
-                    key={driver.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.02 }}
-                    className="border-b border-[#E8002D]/10 hover:bg-[#E8002D]/5 transition-colors"
-                  >
-                    <td className="px-6 py-4 text-white font-heading">
-                      <span 
-                        className="inline-flex items-center justify-center w-8 h-8 rounded-full font-bold"
-                        style={{ backgroundColor: driver.color + '20', color: driver.color }}
-                      >
-                        {driver.position}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-white font-medium">{driver.name}</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <div 
-                          className="w-3 h-3 rounded-full"
-                          style={{ backgroundColor: driver.color }}
-                        />
-                        <span className="text-gray-300 text-sm">{driver.team}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <span className="text-white font-bold text-xl">{driver.points}</span>
-                      <span className="text-gray-400 text-sm ml-1">pts</span>
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </motion.div>
+
+
+        <h2 className="font-heading text-2xl sm:text-3xl font-black text-white tracking-wider leading-tight">
+          DRIVER<br />STANDINGS
+        </h2>
+
+        <div className="space-y-2.5">
+          {drivers.map((driver, i) => {
+            const driverPhoto = getDriverPhoto(driver.name);
+            const lastName = driver.name.split(' ').pop() || driver.name;
+            
+            return (
+              <motion.div
+                key={driver.name}
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.04, duration: 0.45, ease: "easeOut" }}
+                className="relative overflow-hidden rounded-lg flex items-stretch"
+                style={{ background: "#16191f", minHeight: "88px" }}
+              >
+                {/* Angled colored stripes on the left */}
+                <div className="relative shrink-0" style={{ width: "56px" }}>
+                  <div 
+                    className="absolute inset-0" 
+                    style={{ background: driver.color, clipPath: "polygon(0 0, 75% 0, 100% 100%, 0 100%)" }} 
+                  />
+                  <div 
+                    className="absolute inset-0" 
+                    style={{ background: driver.color, clipPath: "polygon(75% 0, 82% 0, 107% 100%, 100% 100%)", opacity: 0.85 }} 
+                  />
+                </div>
+
+                {/* Position */}
+                <div className="flex items-center justify-center shrink-0 px-3" style={{ background: "rgba(0,0,0,0.25)", minWidth: "64px" }}>
+                  <span className="font-heading font-black text-white tracking-tighter" style={{ fontSize: "32px", lineHeight: 1 }}>
+                    P{driver.position}
+                  </span>
+                </div>
+
+                {/* Driver photo */}
+                {driverPhoto && (
+                  <div className="flex items-center justify-center shrink-0 px-2">
+                    <img 
+                      src={driverPhoto} 
+                      alt={driver.name}
+                      className="w-12 h-12 rounded-full object-cover border-2 border-white/20"
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  </div>
+                )}
+
+                {/* Driver info - only big name */}
+                <div className="flex-1 flex flex-col justify-center px-3 py-3">
+                  <p className="font-heading font-black text-white text-lg sm:text-xl leading-tight tracking-wide">{lastName.toUpperCase()}</p>
+                  <p className="font-heading text-[9px] text-white/35 tracking-widest mt-0.5">{driver.team}</p>
+                </div>
+
+                {/* Points */}
+                <div className="flex items-center justify-end px-4 shrink-0">
+                  <p className="font-heading font-black text-white" style={{ fontSize: "24px", lineHeight: 1 }}>
+                    {driver.points}
+                    <span className="text-xs font-normal text-white/50 ml-1">pts</span>
+                  </p>
+                </div>
+
+                {/* Speed lines overlay */}
+                <div 
+                  className="absolute inset-0 pointer-events-none" 
+                  style={{ backgroundImage: `repeating-linear-gradient(-12deg, transparent, transparent 12px, rgba(255,255,255,0.015) 12px, rgba(255,255,255,0.015) 13px)` }} 
+                />
+
+                {/* Bottom accent */}
+                <div 
+                  className="absolute bottom-0 left-0 h-[2px]" 
+                  style={{ background: `linear-gradient(90deg, ${driver.color}, ${driver.color}80, transparent)`, width: "60%" }} 
+                />
+              </motion.div>
+            );
+          })}
+        </div>
+
+        <div className="text-center pb-6">
+          <span className="font-heading text-sm text-muted-foreground tracking-widest">
+          </span>
+        </div>
       </div>
     </div>
   );
