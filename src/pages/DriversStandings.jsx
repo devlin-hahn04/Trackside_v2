@@ -51,7 +51,7 @@ export default function DriversStandings() {
       {/* Top red bar */}
       <div className="h-[4px] bg-gradient-to-r from-[#E8002D] via-[#ff4444] to-[#E8002D]" />
 
-      <div className="relative max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+      <div className="relative max-w-2xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {/* Logo and Header */}
         <div className="flex justify-between items-start">
           <div className="flex-1" />
@@ -60,12 +60,11 @@ export default function DriversStandings() {
         
         <F1Header />
 
-
-        <h2 className="font-heading text-2xl sm:text-3xl font-black text-white tracking-wider leading-tight">
+        <h2 className="font-heading text-xl sm:text-3xl font-black text-white tracking-wider leading-tight">
           DRIVER<br />STANDINGS
         </h2>
 
-        <div className="space-y-2.5">
+        <div className="space-y-2">
           {drivers.map((driver, i) => {
             const driverPhoto = getDriverPhoto(driver.name);
             const lastName = driver.name.split(' ').pop() || driver.name;
@@ -77,10 +76,10 @@ export default function DriversStandings() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.04, duration: 0.45, ease: "easeOut" }}
                 className="relative overflow-hidden rounded-lg flex items-stretch"
-                style={{ background: "#16191f", minHeight: "88px" }}
+                style={{ background: "#16191f", minHeight: "70px" }}
               >
-                {/* Angled colored stripes on the left */}
-                <div className="relative shrink-0" style={{ width: "56px" }}>
+                {/* Angled colored stripes - SMALLER on mobile */}
+                <div className="relative shrink-0" style={{ width: { base: "40px", sm: "56px" } }}>
                   <div 
                     className="absolute inset-0" 
                     style={{ background: driver.color, clipPath: "polygon(0 0, 75% 0, 100% 100%, 0 100%)" }} 
@@ -91,37 +90,39 @@ export default function DriversStandings() {
                   />
                 </div>
 
-                {/* Position */}
-                <div className="flex items-center justify-center shrink-0 px-3" style={{ background: "rgba(0,0,0,0.25)", minWidth: "64px" }}>
-                  <span className="font-heading font-black text-white tracking-tighter" style={{ fontSize: "32px", lineHeight: 1 }}>
+                {/* Position - SMALLER on mobile */}
+                <div className="flex items-center justify-center shrink-0 px-2 sm:px-3" style={{ background: "rgba(0,0,0,0.25)", minWidth: "45px sm:min-width:64px" }}>
+                  <span className="font-heading font-black text-white tracking-tighter" style={{ fontSize: "20px sm:32px", lineHeight: 1 }}>
                     P{driver.position}
                   </span>
                 </div>
 
-                {/* Driver photo */}
+                {/* Driver photo - SMALLER on mobile */}
                 {driverPhoto && (
-                  <div className="flex items-center justify-center shrink-0 px-2">
+                  <div className="flex items-center justify-center shrink-0 px-1 sm:px-2">
                     <img 
                       src={driverPhoto} 
                       alt={driver.name}
-                      className="w-12 h-12 rounded-full object-cover border-2 border-white/20"
+                      className="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-cover border border-white/20"
                       onError={(e) => { e.target.style.display = 'none'; }}
                     />
                   </div>
                 )}
 
                 {/* Driver info - only big name */}
-                <div className="flex-1 flex flex-col justify-center px-3 py-3">
-                  <p className="font-heading font-black text-white text-lg sm:text-xl leading-tight tracking-wide">{lastName.toUpperCase()}</p>
-                  <p className="font-heading text-[9px] text-white/35 tracking-widest mt-0.5">{driver.team}</p>
+                <div className="flex-1 flex flex-col justify-center px-2 sm:px-3 py-2">
+                  <p className="font-heading font-black text-white text-sm sm:text-xl leading-tight tracking-wide">{lastName.toUpperCase()}</p>
+                  <p className="font-heading text-[8px] sm:text-[9px] text-white/35 tracking-widest mt-0.5 truncate max-w-[120px] sm:max-w-none">{driver.team}</p>
                 </div>
 
-                {/* Points */}
-                <div className="flex items-center justify-end px-4 shrink-0">
-                  <p className="font-heading font-black text-white" style={{ fontSize: "24px", lineHeight: 1 }}>
-                    {driver.points}
-                    <span className="text-xs font-normal text-white/50 ml-1">pts</span>
-                  </p>
+                {/* Points - SMALLER on mobile */}
+                <div className="flex items-center justify-end px-2 sm:px-4 shrink-0">
+                  <div className="text-right">
+                    <p className="font-heading font-black text-white" style={{ fontSize: "18px sm:24px", lineHeight: 1 }}>
+                      {driver.points}
+                    </p>
+                    <span className="text-[8px] sm:text-xs font-normal text-white/50">pts</span>
+                  </div>
                 </div>
 
                 {/* Speed lines overlay */}
@@ -140,8 +141,8 @@ export default function DriversStandings() {
           })}
         </div>
 
-        <div className="text-center pb-6">
-          <span className="font-heading text-sm text-muted-foreground tracking-widest">
+        <div className="text-center pb-4 sm:pb-6">
+          <span className="font-heading text-xs sm:text-sm text-muted-foreground tracking-widest">
           </span>
         </div>
       </div>
