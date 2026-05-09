@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { useScraperData } from "../lib/scraperData";
 import LogoDropdown from "../components/ui/LogoDropdown";
 import F1Header from "../components/f1/F1header";
+import { teamLogos } from "../lib/teamLogos";
 
 export default function ConstructorsStandings() {
   const { loading, error, constructors } = useScraperData();
@@ -30,83 +33,111 @@ export default function ConstructorsStandings() {
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ background: "#111318" }}>
+      {/* Speed lines background */}
       <div
         className="absolute inset-0 pointer-events-none opacity-10"
         style={{
-          backgroundImage: `repeating-linear-gradient(
-            -8deg,
-            transparent,
-            transparent 60px,
-            rgba(255,255,255,0.03) 60px,
-            rgba(255,255,255,0.03) 62px
-          )`,
+          backgroundImage: `repeating-linear-gradient(-8deg, transparent, transparent 60px, rgba(255,255,255,0.03) 60px, rgba(255,255,255,0.03) 62px)`,
         }}
       />
-      
+      {/* Top red bar */}
       <div className="h-[4px] bg-gradient-to-r from-[#E8002D] via-[#ff4444] to-[#E8002D]" />
 
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 py-6">
-        <div className="flex justify-end mb-4">
+      <div className="relative max-w-2xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
+        {/* Logo and Header */}
+        <div className="flex justify-between items-start">
+          <div className="flex-1" />
           <LogoDropdown />
         </div>
         
         <F1Header />
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mt-8"
-        >
-          <h2 className="font-heading text-3xl sm:text-4xl font-black text-white tracking-wider mb-6">
-            CONSTRUCTOR STANDINGS
-          </h2>
-          
-          <div className="bg-[#1a1d24] rounded-lg overflow-hidden border border-[#E8002D]/20">
-            <table className="w-full">
-              <thead className="bg-[#E8002D]/10 border-b border-[#E8002D]/30">
-                <tr>
-                  <th className="px-6 py-4 text-left text-white font-heading text-sm">POS</th>
-                  <th className="px-6 py-4 text-left text-white font-heading text-sm">TEAM</th>
-                  <th className="px-6 py-4 text-right text-white font-heading text-sm">POINTS</th>
-                </tr>
-              </thead>
-              <tbody>
-                {constructors.map((team, index) => (
-                  <motion.tr
-                    key={team.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="border-b border-[#E8002D]/10 hover:bg-[#E8002D]/5 transition-colors"
-                  >
-                    <td className="px-6 py-4 text-white font-heading">
-                      <span 
-                        className="inline-flex items-center justify-center w-8 h-8 rounded-full font-bold"
-                        style={{ backgroundColor: team.color + '20', color: team.color }}
-                      >
-                        {team.position}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div 
-                          className="w-3 h-3 rounded-full"
-                          style={{ backgroundColor: team.color }}
-                        />
-                        <span className="text-white font-medium">{team.name}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <span className="text-white font-bold text-xl">{team.points}</span>
-                      <span className="text-gray-400 text-sm ml-1">pts</span>
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </motion.div>
+
+        <h2 className="font-heading text-xl sm:text-3xl font-black text-white tracking-wider leading-tight">
+          CONSTRUCTOR<br />STANDINGS
+        </h2>
+
+        <div className="space-y-2">
+          {constructors.map((team, i) => {
+            return (
+              <motion.div
+                key={team.name}
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.04, duration: 0.45, ease: "easeOut" }}
+                className="relative overflow-hidden rounded-lg flex items-stretch"
+                style={{ background: "#16191f", minHeight: "70px" }}
+              >
+                {/* Angled colored stripes - SMALLER on mobile */}
+                <div className="relative shrink-0" style={{ width: { base: "40px", sm: "56px" } }}>
+                  <div 
+                    className="absolute inset-0" 
+                    style={{ background: team.color, clipPath: "polygon(0 0, 75% 0, 100% 100%, 0 100%)" }} 
+                  />
+                  <div 
+                    className="absolute inset-0" 
+                    style={{ background: team.color, clipPath: "polygon(75% 0, 82% 0, 107% 100%, 100% 100%)", opacity: 0.85 }} 
+                  />
+                </div>
+
+                {/* Position - SMALLER on mobile */}
+                <div className="flex items-center justify-center shrink-0 px-2 sm:px-3" style={{ background: "rgba(0,0,0,0.25)", minWidth: "45px" }}>
+                  <span className="font-heading font-black text-white tracking-tighter" style={{ fontSize: "20px", lineHeight: 1 }}>
+                    {team.position}
+                  </span>
+                </div>
+
+                {/* Team logo */}
+                <div className="flex items-center justify-center shrink-0 px-1 sm:px-2">
+                  {teamLogos[team.name] ? (
+                    <img 
+                      src={teamLogos[team.name]} 
+                      alt={team.name}
+                      className="w-8 h-8 sm:w-12 sm:h-12 object-contain"
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  ) : (
+                    <div 
+                      className="w-8 h-8 sm:w-12 sm:h-12 rounded-full"
+                      style={{ background: `${team.color}20` }}
+                    />
+                  )}
+                </div>
+
+                {/* Team info */}
+                <div className="flex-1 flex flex-col justify-center px-2 sm:px-3 py-2">
+                  <p className="font-heading font-black text-white text-sm sm:text-xl leading-tight tracking-wide">{team.name}</p>
+                </div>
+
+                {/* Points - SMALLER on mobile */}
+                <div className="flex items-center justify-end px-2 sm:px-4 shrink-0">
+                  <div className="text-right">
+                    <p className="font-heading font-black text-white" style={{ fontSize: "18px", lineHeight: 1 }}>
+                      {team.points}
+                    </p>
+                    <span className="text-[8px] sm:text-xs font-normal text-white/50">pts</span>
+                  </div>
+                </div>
+
+                {/* Speed lines overlay */}
+                <div 
+                  className="absolute inset-0 pointer-events-none" 
+                  style={{ backgroundImage: `repeating-linear-gradient(-12deg, transparent, transparent 12px, rgba(255,255,255,0.015) 12px, rgba(255,255,255,0.015) 13px)` }} 
+                />
+
+                {/* Bottom accent */}
+                <div 
+                  className="absolute bottom-0 left-0 h-[2px]" 
+                  style={{ background: `linear-gradient(90deg, ${team.color}, ${team.color}80, transparent)`, width: "60%" }} 
+                />
+              </motion.div>
+            );
+          })}
+        </div>
+
+        <div className="text-center pb-4 sm:pb-6">
+          <span className="font-heading text-xs sm:text-sm text-muted-foreground tracking-widest">
+          </span>
+        </div>
       </div>
     </div>
   );
