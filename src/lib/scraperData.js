@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 // Global state
 export let nextRace = null;
+export let fullSchedule = [];  // NEW: Add global state for full schedule
 export const driversData = new Map();
 export const constructorsPoints = new Map();
 export const driverPhotos = new Map();
@@ -54,6 +55,7 @@ export const loadLatestData = async () => {
   
   if (latestData) {
     nextRace = latestData.next_race;
+    fullSchedule = latestData.full_schedule || [];  // NEW: Load full schedule
     
     const driversList = latestData.drivers_championship;
     driversData.clear();
@@ -78,6 +80,7 @@ export const loadLatestData = async () => {
     
     console.log('Data loaded successfully:', {
       nextRace,
+      fullScheduleCount: fullSchedule.length,  // NEW: Log schedule count
       driversCount: driversData.size,
       constructorsCount: constructorsPoints.size,
       photosCount: driverPhotos.size
@@ -177,6 +180,11 @@ export const getNextRaceInfo = () => {
   };
 };
 
+// NEW: Get full schedule function
+export const getFullSchedule = () => {
+  return fullSchedule;
+};
+
 // React Hook
 export const useScraperData = () => {
   const [loading, setLoading] = useState(true);
@@ -185,6 +193,7 @@ export const useScraperData = () => {
   const [drivers, setDrivers] = useState([]);
   const [constructors, setConstructors] = useState([]);
   const [raceInfo, setRaceInfo] = useState(null);
+  const [schedule, setSchedule] = useState([]);  // NEW: State for schedule
   
   useEffect(() => {
     const initData = async () => {
@@ -197,6 +206,7 @@ export const useScraperData = () => {
           setDrivers(getDriverStandingsArray());
           setConstructors(getConstructorStandingsArray());
           setRaceInfo(getNextRaceInfo());
+          setSchedule(fullSchedule);  // NEW: Set schedule state
         } else {
           setError('Failed to load scraper data');
         }
@@ -217,6 +227,7 @@ export const useScraperData = () => {
       setDrivers(getDriverStandingsArray());
       setConstructors(getConstructorStandingsArray());
       setRaceInfo(getNextRaceInfo());
+      setSchedule(fullSchedule);  // NEW: Update schedule state
       setDataLoaded(true);
       setError(null);
     } else {
@@ -233,6 +244,7 @@ export const useScraperData = () => {
     drivers,
     constructors,
     nextRace: raceInfo,
+    fullSchedule: schedule,  // NEW: Return full schedule
     driversDataMap: driversData,
     constructorsPointsMap: constructorsPoints,
     driverPhotosMap: driverPhotos,

@@ -6,6 +6,7 @@ import PageNotFound from './lib/PageNotFound';
 import Home from './pages/Home';
 import ConstructorsStandings from './pages/ConstructorsStandings';
 import DriversStandings from './pages/DriversStandings';
+import Calendar from './pages/CalendarPage.jsx';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/constructors" element={<ConstructorsStandings />} />
           <Route path="/drivers" element={<DriversStandings />} />
+          <Route path="/calendar" element={<Calendar />} />  {/* Fixed this line */}
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>
